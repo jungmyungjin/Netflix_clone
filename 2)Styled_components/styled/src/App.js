@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 
 // styled components 사용하기
 // - className을 사용할 필요 X
@@ -42,6 +42,51 @@ const Input = styled.input.attrs({ required: true, minLength: "10" })`
   background-color: green;
 `;
 
+// anination 공부
+const turnturn = keyframes` // 일반적인 css의 animation을 적용시키면 됨
+0% {
+	transform : rotate(0deg);
+	border-radius: 0px;
+}
+50% {
+	transform : rotate(360deg);
+	border-radius:100px;
+}
+100%{
+	transform : rotate(0deg);
+	border-radius: 0px;
+}
+`;
+
+const Box2 = styled.div`
+  height: 200px;
+  width: 200px;
+  background-color: yellow;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation: ${turnturn} 1s linear infinite;
+  // div형태의 Box2 컴포넌트 하위 'span'태그를 선택 함
+  span {
+    font-size: 40px;
+    // span:hover{} -> 라고 적는것과 같은 의미
+    // & : 부모 태그를 선택할 수 있다
+    &:hover {
+      font-size: 100px;
+    }
+    &:active {
+      opacity: 0;
+    }
+  }
+  /* 위에서 대체된 내용
+  span:hover {
+    font-size: 100px;
+  }
+  span:active {
+    opacity: 0;
+  } */
+`;
+
 function App() {
   return (
     <Father as="Header">
@@ -50,11 +95,14 @@ function App() {
       {/* 스타일은 유지한 채 태그만 바꾸는 방법 */}
       {/* 버튼 스타일 컴포넌트인 Btn을 사용할건데, HTML부분을 a태그로 바꾼다는 의미 */}
       <Btn as="a"> login </Btn>
-
       <Input />
       <Input />
       <Input />
       <Input />
+      {/* animation */}
+      <Box2>
+        <span>🥰 </span>
+      </Box2>
     </Father>
   );
 }
