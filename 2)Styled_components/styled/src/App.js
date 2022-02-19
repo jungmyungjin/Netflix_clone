@@ -87,6 +87,31 @@ const Box2 = styled.div`
   } */
 `;
 
+// 나만의 태그 명을 만드는 방법
+const Emoji = styled.span`
+  font-size: 40px;
+`;
+
+const Box3 = styled.div`
+  height: 200px;
+  width: 200px;
+  background-color: yellow;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation: ${turnturn} 1s linear infinite;
+
+  // 위에서 정의한 태그 컴포넌트를 가져와서 사용한다.
+  ${Emoji} {
+    &:hover {
+      font-size: 100px;
+    }
+    &:active {
+      opacity: 0;
+    }
+  }
+`;
+
 function App() {
   return (
     <Father as="Header">
@@ -100,9 +125,14 @@ function App() {
       <Input />
       <Input />
       {/* animation */}
-      <Box2>
-        <span>🥰 </span>
-      </Box2>
+      <Box3>
+        {/* 아래의 최종태그는 p태그이다.
+		 그러나 태그가 무엇이던간에 스타일 컴포넌트는 Emoji가 적용된다.
+		 Emoji는 span태그 기반이지만, 그에 설정한 style은 그대로 적용된다 */}
+        <Emoji as="p">🥰 </Emoji>
+      </Box3>
+
+      <Emoji>😜</Emoji>
     </Father>
   );
 }
