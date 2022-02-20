@@ -12,6 +12,7 @@ import styled, { keyframes } from "styled-components";
 const Father = styled.div`
   display: flex;
   flex-direction: column;
+  background-color: ${(props) => props.theme.backgroundColor};
 `;
 
 // 가용성 있도록 변경하여 사용하기
@@ -112,9 +113,15 @@ const Box3 = styled.div`
   }
 `;
 
+// 테마 적용
+const Title = styled.h1`
+  // index.js 의 Themeprovider에 적용한 컬러를 가져온다.
+  color: ${(props) => props.theme.textColor};
+`;
 function App() {
   return (
     <Father as="Header">
+      <Title>Hello this mode ______ </Title>
       <Box bgColor="teal" />
       <Circle bgColor="tomato" />
       {/* 스타일은 유지한 채 태그만 바꾸는 방법 */}
