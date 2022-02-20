@@ -130,9 +130,10 @@ function App() {
 		 그러나 태그가 무엇이던간에 스타일 컴포넌트는 Emoji가 적용된다.
 		 Emoji는 span태그 기반이지만, 그에 설정한 style은 그대로 적용된다 */}
         <Emoji as="p">🥰 </Emoji>
+        {/* 이모지는 span태그 기반이지만, 실제로 styled한 컴포넌트는 Emoji이기 때문에,
+		span은 해당 스타일이 적용되지 않는다 */}
+        <span>😜</span>
       </Box3>
-
-      <Emoji>😜</Emoji>
     </Father>
   );
 }
