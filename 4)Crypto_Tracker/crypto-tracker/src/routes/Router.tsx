@@ -8,7 +8,7 @@ function Router() {
       <Routes>
         {/* :coinID -> url이 변수값을 갖는다는것을 의미한다 */}
         {/*  /* -> 하위 경로가 있다는 것을 의미한다. */}
-          <Route path="/:coinId/*" element={<Coin />} />
+        <Route path="/:coinId/*" element={<Coin />} />
         <Route path="/" element={<Coins />} />
       </Routes>
     </BrowserRouter>

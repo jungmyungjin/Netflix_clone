@@ -101,5 +101,4 @@ function Coins() {
     </Container>
   );
 }
-
 export default Coins;

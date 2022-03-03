@@ -1,5 +1,5 @@
 import { useParams, useLocation } from "react-router";
-import { BrowserRouter, Route, Routes, Link, useMatch } from "react-router-dom"
+import { BrowserRouter, Route, Routes, Link, useMatch } from "react-router-dom";
 import styled from "styled-components";
 import { useState, useEffect } from "react";
 import Price from "./Price";
@@ -29,7 +29,7 @@ const Header = styled.header`
 
 const TodayPrice = styled.div`
   height: 60px;
-  background-color: ${(props)=> props.theme.accentColor};
+  background-color: ${(props) => props.theme.accentColor};
   display: flex;
   flex-direction: column;
   justify-content: space-around;
@@ -38,10 +38,10 @@ const TodayPrice = styled.div`
   padding: 5px 0px;
   font-size: 15px;
   margin-bottom: 10px;
-  span:nth-child(1){
+  span:nth-child(1) {
     font-size: 20px;
   }
-`
+`;
 
 const Loading = styled.span`
   text-align: center;
@@ -49,58 +49,59 @@ const Loading = styled.span`
 `;
 
 const Overview = styled.div`
-  background-color: ${props => props.theme.subAccentColor};
+  background-color: ${(props) => props.theme.subAccentColor};
   height: 80px;
-  width:100%;
+  width: 100%;
   border-radius: 20px;
   display: flex;
   justify-content: space-around;
 `;
 
 const OverviewItem = styled.div`
-  width:100%;
+  width: 100%;
   height: 80px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   span {
     text-align: center;
-    color: ${props => props.theme.textColor};
+    color: ${(props) => props.theme.textColor};
     margin: 5px 0px;
   }
-  span:first-child{
+  span:first-child {
     text-transform: uppercase;
-    font-size:13px;
+    font-size: 13px;
   }
-  span:nth-child(2){
+  span:nth-child(2) {
     font-size: 20px;
   }
 `;
 
 const Description = styled.div`
-  @import url('https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@300&display=swap');
+  @import url("https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@300&display=swap");
   margin: 25px 0px;
-  span{
+  span {
     font-size: 20px;
-    font-family: 'Chakra Petch', sans-serif;
+    font-family: "Chakra Petch", sans-serif;
     line-height: 25px;
   }
-`
+`;
 
 const Tabs = styled.div`
   height: 50px;
-  width:100%;
+  width: 100%;
   margin: 20px 0px;
   display: flex;
   justify-content: space-around;
   align-items: center;
-`
+`;
 
 // <{isActive123:boolean}> : boolean 타입의 'isActive123' property를 추가한다.
-const Tab = styled.span<{isActive123:boolean}>`
-  background-color: ${props=>props.theme.subAccentColor};
-  font-weight: ${props=> props.isActive123 ? "bold" : "nomal"};
-  color : ${props => props.isActive123 ? props.theme.accentColor : props.theme.textColor};
+const Tab = styled.span<{ isActive123: boolean }>`
+  background-color: ${(props) => props.theme.subAccentColor};
+  font-weight: ${(props) => (props.isActive123 ? "bold" : "nomal")};
+  color: ${(props) =>
+    props.isActive123 ? props.theme.accentColor : props.theme.textColor};
   width: 200px;
   height: 40px;
   text-transform: uppercase;
@@ -108,10 +109,10 @@ const Tab = styled.span<{isActive123:boolean}>`
   justify-content: center;
   align-items: center;
   border-radius: 15px;
-  a{
+  a {
     display: block;
   }
-`
+`;
 
 interface RouteState {
   name: string;
@@ -220,18 +221,16 @@ function Coin() {
         <Title> {state ? `코인 ${state.name}` : "Loading..."}</Title>
       </Header>
 
-
       <TodayPrice>
         {/* priceInfo? : typescript가 api에서 오는 것인걸 알고, 그렇다면 항상 있는 값이 아니므로 자동으로 붙여준다 */}
         {loading ? (
-            <Loading>Loading....</Loading>
-        ) : <>
-        <span> Today price</span>
-          <span>
-            USD : ${priceInfo?.quotes.USD.price}
-          </span>
-        </>
-        }
+          <Loading>Loading....</Loading>
+        ) : (
+          <>
+            <span> Today price</span>
+            <span>USD : ${priceInfo?.quotes.USD.price}</span>
+          </>
+        )}
       </TodayPrice>
       <Overview>
         <OverviewItem>
@@ -244,13 +243,11 @@ function Coin() {
         </OverviewItem>
         <OverviewItem>
           <span>OPEN SOURCE</span>
-          <span>{info?.open_source ? 'Yes' : 'NO'}</span>
+          <span>{info?.open_source ? "Yes" : "NO"}</span>
         </OverviewItem>
       </Overview>
       <Description>
-        <span>
-        {info?.description}
-        </span>
+        <span>{info?.description}</span>
       </Description>
       <Overview>
         <OverviewItem>
@@ -266,8 +263,12 @@ function Coin() {
 
       <Tabs>
         {/*isActive123 속성을 사용하여, 클릭한 링크를 체크하고, 클릭한 링크의 Tab을 css 효과를 주도록한다 (글자 색깔 변화)*/}
-        <Tab isActive123={ChartMatch != null}><Link to ="chart">Chart</Link></Tab>
-        <Tab isActive123={PriceMatch != null}><Link to ="price">Price</Link></Tab>
+        <Tab isActive123={ChartMatch != null}>
+          <Link to="chart">Chart</Link>
+        </Tab>
+        <Tab isActive123={PriceMatch != null}>
+          <Link to="price">Price</Link>
+        </Tab>
       </Tabs>
 
       <Routes>
