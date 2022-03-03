@@ -1,6 +1,9 @@
 import { useParams, useLocation } from "react-router";
+import { BrowserRouter, Route, Routes, Link, useMatch } from "react-router-dom"
 import styled from "styled-components";
 import { useState, useEffect } from "react";
+import Price from "./Price";
+import Chart from "./Chart";
 
 // type 정의 방법1
 interface Params {
@@ -15,6 +18,7 @@ const Container = styled.div`
   padding: 0px 20px;
   max-width: 480px;
   margin: 0px auto;
+  height: auto;
 `;
 const Header = styled.header`
   height: 10vh;
@@ -22,11 +26,92 @@ const Header = styled.header`
   justify-content: center;
   align-items: center;
 `;
+
+const TodayPrice = styled.div`
+  height: 60px;
+  background-color: ${(props)=> props.theme.accentColor};
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  border-radius: 18px;
+  padding: 5px 0px;
+  font-size: 15px;
+  margin-bottom: 10px;
+  span:nth-child(1){
+    font-size: 20px;
+  }
+`
+
 const Loading = styled.span`
   text-align: center;
   display: block;
-  margin: 50px auto;
 `;
+
+const Overview = styled.div`
+  background-color: ${props => props.theme.subAccentColor};
+  height: 80px;
+  width:100%;
+  border-radius: 20px;
+  display: flex;
+  justify-content: space-around;
+`;
+
+const OverviewItem = styled.div`
+  width:100%;
+  height: 80px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  span {
+    text-align: center;
+    color: ${props => props.theme.textColor};
+    margin: 5px 0px;
+  }
+  span:first-child{
+    text-transform: uppercase;
+    font-size:13px;
+  }
+  span:nth-child(2){
+    font-size: 20px;
+  }
+`;
+
+const Description = styled.div`
+  @import url('https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@300&display=swap');
+  margin: 25px 0px;
+  span{
+    font-size: 20px;
+    font-family: 'Chakra Petch', sans-serif;
+    line-height: 25px;
+  }
+`
+
+const Tabs = styled.div`
+  height: 50px;
+  width:100%;
+  margin: 20px 0px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+`
+
+// <{isActive123:boolean}> : boolean 타입의 'isActive123' property를 추가한다.
+const Tab = styled.span<{isActive123:boolean}>`
+  background-color: ${props=>props.theme.subAccentColor};
+  font-weight: ${props=> props.isActive123 ? "bold" : "nomal"};
+  color : ${props => props.isActive123 ? props.theme.accentColor : props.theme.textColor};
+  width: 200px;
+  height: 40px;
+  text-transform: uppercase;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 15px;
+  a{
+    display: block;
+  }
+`
 
 interface RouteState {
   name: string;
@@ -111,7 +196,8 @@ function Coin() {
   const [info, setInfo] = useState<IInfoData>();
   const [priceInfo, setPriceInfo] = useState<IPriceDate>();
 
-  interface IPriceData {}
+  const PriceMatch = useMatch("/:coinId/price");
+  const ChartMatch = useMatch("/:coinId/chart");
 
   useEffect(() => {
     // 해당 코인에 대한 정보를 가져오는 api, 한번만 실행됨
@@ -133,12 +219,61 @@ function Coin() {
       <Header>
         <Title> {state ? `코인 ${state.name}` : "Loading..."}</Title>
       </Header>
-      {/* priceInfo? : typescript가 api에서 오는 것인걸 알고, 그렇다면 항상 있는 값이 아니므로 자동으로 붙여준다 */}
-      {loading ? (
-        <Loading>Loading....</Loading>
-      ) : (
-        `USD : ${priceInfo?.quotes.USD.price}`
-      )}
+
+
+      <TodayPrice>
+        {/* priceInfo? : typescript가 api에서 오는 것인걸 알고, 그렇다면 항상 있는 값이 아니므로 자동으로 붙여준다 */}
+        {loading ? (
+            <Loading>Loading....</Loading>
+        ) : <>
+        <span> Today price</span>
+          <span>
+            USD : ${priceInfo?.quotes.USD.price}
+          </span>
+        </>
+        }
+      </TodayPrice>
+      <Overview>
+        <OverviewItem>
+          <span>Rank</span>
+          <span>{priceInfo?.rank}</span>
+        </OverviewItem>
+        <OverviewItem>
+          <span>Symbol</span>
+          <span>{`${priceInfo?.symbol}`}</span>
+        </OverviewItem>
+        <OverviewItem>
+          <span>OPEN SOURCE</span>
+          <span>{info?.open_source ? 'Yes' : 'NO'}</span>
+        </OverviewItem>
+      </Overview>
+      <Description>
+        <span>
+        {info?.description}
+        </span>
+      </Description>
+      <Overview>
+        <OverviewItem>
+          <span>Total Supply</span>
+          <span>{priceInfo?.total_supply}</span>
+        </OverviewItem>
+        <OverviewItem>
+          <span>Max Supply</span>
+          <span>${priceInfo?.max_supply}</span>
+        </OverviewItem>
+      </Overview>
+      {/*React-router-dom v6 부터는 상대경로가 지원된다*/}
+
+      <Tabs>
+        {/*isActive123 속성을 사용하여, 클릭한 링크를 체크하고, 클릭한 링크의 Tab을 css 효과를 주도록한다 (글자 색깔 변화)*/}
+        <Tab isActive123={ChartMatch != null}><Link to ="chart">Chart</Link></Tab>
+        <Tab isActive123={PriceMatch != null}><Link to ="price">Price</Link></Tab>
+      </Tabs>
+
+      <Routes>
+        <Route path="price" element={<Price />} />
+        <Route path="chart" element={<Chart />} />
+      </Routes>
     </Container>
   );
 }
