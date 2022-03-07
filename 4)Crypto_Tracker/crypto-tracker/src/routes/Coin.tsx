@@ -6,6 +6,7 @@ import Price from "./Price";
 import Chart from "./Chart";
 import { fetchTickers, fetchInfoData } from "./api";
 import { useQuery } from "react-query";
+import { Helmet } from "react-helmet";
 
 // type 정의 방법1
 interface Params {
@@ -225,13 +226,17 @@ function Coin() {
   );
   const { isLoading: tickersLoading, data: tickersData } = useQuery<IPriceDate>(
     ["tickers ", coinId],
-    () => fetchTickers(coinId)
+    () => fetchTickers(coinId),
+    { refetchInterval: 5000 } // 리프레쉬 간격
   );
   const loading = infoLoading || tickersLoading;
   return (
     <Container>
+      <Helmet>
+        <title>{infoLoading ? "Loading..." : `${coinId}`}</title>
+      </Helmet>
       <Header>
-        <Title> {state ? `코인 ${state.name}` : "Loading..."}</Title>
+        <Title> {infoLoading ? "Loading..." : `코인 ${coinId}`}</Title>
       </Header>
 
       <TodayPrice>
@@ -285,8 +290,8 @@ function Coin() {
       </Tabs>
 
       <Routes>
+        <Route path="chart" element={<Chart coinId={coinId as string} />} />
         <Route path="price" element={<Price />} />
-        <Route path="chart" element={<Chart />} />
       </Routes>
     </Container>
   );
