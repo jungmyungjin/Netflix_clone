@@ -2,6 +2,7 @@ import React from "react";
 import { useState } from "react";
 import { createGlobalStyle } from "styled-components";
 import Router from "./routes/Router";
+import { ReactQueryDevtools } from "react-query/devtools";
 
 // 글로벌 스타일 적용 : 전역 스코프에 스타일을 올려준다
 // styled-reset 수동으로 적용
@@ -74,6 +75,7 @@ function App() {
     <>
       <GlobalStyled />
       <Router />
+      <ReactQueryDevtools initialIsOpen={true}></ReactQueryDevtools>
     </>
   );
 }

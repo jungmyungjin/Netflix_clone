@@ -1,6 +1,8 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
+import { useQuery } from "react-query";
+import { fetchCoins } from "./api";
 
 const Title = styled.h1`
   color: ${(props) => props.theme.accentColor};
@@ -50,7 +52,7 @@ const Img = styled.img`
   margin-right: 10px;
 `;
 
-interface CoinInterface {
+interface Icoin {
   id: string;
   name: string;
   symbol: string;
@@ -61,12 +63,11 @@ interface CoinInterface {
 }
 
 function Coins() {
+  /* React Query를 사용한 [api.tsx] 파일로 분리
   const [coins, setCoins] = useState<CoinInterface[]>([]);
   const [loading, setLoading] = useState(true);
   // 한번만 실행
   useEffect(() => {
-    // 함수를 바로 만들고 실행
-    // (()=>{}) ();
     (async () => {
       const response = await fetch("https://api.coinpaprika.com/v1/coins");
       const json = await response.json();
@@ -74,16 +75,23 @@ function Coins() {
     })();
     setLoading(false);
   }, []);
+   */
+  // useQuery 라는 Hook을 사용
+  // useQuery(QueryKey[쿼리의 고유 식별자], fetcherFunction[패치할 함수])
+  // useQuery에서 리턴하는 값
+  // isLoading{boolean} : fetch 함수가 로딩중인지 알려주는 변수
+  // data : fetch 함수가 리턴하는 값을 담은 변수
+  const { isLoading, data } = useQuery<Icoin[]>("allCoins", fetchCoins);
   return (
     <Container>
       <Header>
         <Title>Coins</Title>
       </Header>
-      {loading ? (
+      {isLoading ? (
         <Loading>Loading....</Loading>
       ) : (
         <CoinList>
-          {coins.map((coin) => (
+          {data?.slice(0, 100).map((coin) => (
             // &rarr; : 화살표(->)
             <Coin key={coin.id}>
               {/* react-router-dom 의 state를 사용하여 정보를 넘겨준다 */}

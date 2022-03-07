@@ -4,6 +4,8 @@ import styled from "styled-components";
 import { useState, useEffect } from "react";
 import Price from "./Price";
 import Chart from "./Chart";
+import { fetchTickers, fetchInfoData } from "./api";
+import { useQuery } from "react-query";
 
 // type 정의 방법1
 interface Params {
@@ -122,13 +124,11 @@ function Coin() {
   // react-router-dom v6가 되면서 사용법이 바뀌었다...
   // useParams : 파라미터의 정보를 가져온다.
   const { coinId } = useParams() as unknown as Params;
-  const [loading, setLoading] = useState(true);
   // useLocation : react-router-dom 의 Link 에서 넘겨준 데이터를 받는다.
   // 새로 api를 받지 않고 기존에 있는 데이터를 사용함으로써, 사용자가 보기에 속도가 빠르게 느껴진다.
   const location = useLocation();
   // 아래의 state는 home 에서 만들어진 state이므로, (크롬 시크릿모드에서)home을 거치지 않고 바로 코인주소를 치게되면 에러가 난다.
   const state = location.state as RouteState;
-
   interface ITag {
     coin_counter: number;
     ico_counter: number;
@@ -137,6 +137,7 @@ function Coin() {
   }
 
   // 타입스크립트 코드 베이스에 보면 인터페이스명 앞에 'I'를 붙힌다
+
   interface IInfoData {
     id: string;
     name: string;
@@ -159,7 +160,6 @@ function Coin() {
     first_data_at: string;
     last_data_at: string;
   }
-
   interface IPriceDate {
     id: string;
     name: string;
@@ -194,11 +194,13 @@ function Coin() {
     };
   }
 
-  const [info, setInfo] = useState<IInfoData>();
-  const [priceInfo, setPriceInfo] = useState<IPriceDate>();
-
   const PriceMatch = useMatch("/:coinId/price");
   const ChartMatch = useMatch("/:coinId/chart");
+
+  /* React Query로 대체
+  const [loading, setLoading] = useState(true);
+  const [info, setInfo] = useState<IInfoData>();
+  const [priceInfo, setPriceInfo] = useState<IPriceDate>();
 
   useEffect(() => {
     // 해당 코인에 대한 정보를 가져오는 api, 한번만 실행됨
@@ -214,7 +216,18 @@ function Coin() {
       setLoading(false);
     })();
   }, []);
-
+*/
+  // key는 해당 페이지의 고유한 키이기 떄문에 중복되어선 안된다. queryKey는 Array의 타입으로 입력받기 때문에 다른 값의 Array로 주어 고유성을 보장한다.
+  // { isLoading: infoLoading, data: infoData } => 객체디스트럭처링(Object Destructuring), 이 경우 변수명을 재정의 한다고 보면 된다.
+  const { isLoading: infoLoading, data: infoData } = useQuery<IInfoData>(
+    ["info", coinId],
+    () => fetchInfoData(coinId) // 인자값을 넘겨줄 때 익명함수를 사용하여 인자값을 포함한 함수를 리턴하도록 한다.
+  );
+  const { isLoading: tickersLoading, data: tickersData } = useQuery<IPriceDate>(
+    ["tickers ", coinId],
+    () => fetchTickers(coinId)
+  );
+  const loading = infoLoading || tickersLoading;
   return (
     <Container>
       <Header>
@@ -228,35 +241,35 @@ function Coin() {
         ) : (
           <>
             <span> Today price</span>
-            <span>USD : ${priceInfo?.quotes.USD.price}</span>
+            <span>USD : ${tickersData?.quotes.USD.price}</span>
           </>
         )}
       </TodayPrice>
       <Overview>
         <OverviewItem>
           <span>Rank</span>
-          <span>{priceInfo?.rank}</span>
+          <span>{tickersData?.rank}</span>
         </OverviewItem>
         <OverviewItem>
           <span>Symbol</span>
-          <span>{`${priceInfo?.symbol}`}</span>
+          <span>{`${tickersData?.symbol}`}</span>
         </OverviewItem>
         <OverviewItem>
           <span>OPEN SOURCE</span>
-          <span>{info?.open_source ? "Yes" : "NO"}</span>
+          <span>{infoData?.open_source ? "Yes" : "NO"}</span>
         </OverviewItem>
       </Overview>
       <Description>
-        <span>{info?.description}</span>
+        <span>{infoData?.description}</span>
       </Description>
       <Overview>
         <OverviewItem>
           <span>Total Supply</span>
-          <span>{priceInfo?.total_supply}</span>
+          <span>{tickersData?.total_supply}</span>
         </OverviewItem>
         <OverviewItem>
           <span>Max Supply</span>
-          <span>${priceInfo?.max_supply}</span>
+          <span>${tickersData?.max_supply}</span>
         </OverviewItem>
       </Overview>
       {/*React-router-dom v6 부터는 상대경로가 지원된다*/}
