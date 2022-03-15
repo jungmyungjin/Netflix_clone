@@ -7,6 +7,8 @@ import Chart from "./Chart";
 import { fetchTickers, fetchInfoData } from "./api";
 import { useQuery } from "react-query";
 import { Helmet } from "react-helmet";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faHouse } from "@fortawesome/free-solid-svg-icons";
 
 // type 정의 방법1
 interface Params {
@@ -15,7 +17,8 @@ interface Params {
 
 const Title = styled.h1`
   color: ${(props) => props.theme.accentColor};
-  font-size: 48px;
+  font-size: 40px;
+  justify-self: center;
 `;
 const Container = styled.div`
   padding: 0px 20px;
@@ -26,8 +29,15 @@ const Container = styled.div`
 const Header = styled.header`
   height: 10vh;
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
+  a:hover {
+    color: ${(props) => props.theme.accentColor};
+    transition: color 0.1s ease-in-out;
+  }
+  a {
+    font-size: 25px;
+  }
 `;
 
 const TodayPrice = styled.div`
@@ -236,7 +246,10 @@ function Coin() {
         <title>{infoLoading ? "Loading..." : `${coinId}`}</title>
       </Helmet>
       <Header>
-        <Title> {infoLoading ? "Loading..." : `코인 ${coinId}`}</Title>
+        <Title>{infoLoading ? "Loading..." : `${coinId}`} </Title>
+        <Link to={"/"}>
+          <FontAwesomeIcon icon={faHouse} />
+        </Link>
       </Header>
 
       <TodayPrice>
@@ -291,7 +304,7 @@ function Coin() {
 
       <Routes>
         <Route path="chart" element={<Chart coinId={coinId as string} />} />
-        <Route path="price" element={<Price />} />
+        <Route path="price" element={<Price coinId={coinId as string} />} />
       </Routes>
     </Container>
   );
