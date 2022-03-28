@@ -101,11 +101,14 @@ function Coins() {
               {/* react-router-dom 의 state를 사용하여 정보를 넘겨준다 */}
               <Link to={`/${coin.id}`} state={{ name: coin.name }}>
                 <Img
-                  src={`https://cryptoicon-api.vercel.app/api/icon/${coin.symbol.toLowerCase()}`}
+                  // 기존 사이트 서버가 닫혀서 동작히자 않음
+                  // src={`https://cryptoicon-api.vercel.app/api/icon/${coin.symbol.toLowerCase()}`}
+                  src={`https://cryptocurrencyliveprices.com/img/${coin.id}.png`}
                   alt=""
                 />
                 {coin.name} &rarr;
               </Link>
+              {console.log(coin)}
             </Coin>
           ))}
         </CoinList>
