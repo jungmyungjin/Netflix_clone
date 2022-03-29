@@ -4,7 +4,7 @@ import ApexChart from "react-apexcharts";
 
 interface IPriceProps {
   coinId: string;
-  isDark: boolean;
+  // isDark: boolean;
 }
 
 interface IHistorical {
@@ -19,7 +19,8 @@ interface IHistorical {
 }
 
 // coin 페이지에서 가져옴
-function Price({ coinId, isDark }: IPriceProps) {
+// function Price({ coinId, isDark }: IPriceProps) {
+function Price({ coinId }: IPriceProps) {
   const { isLoading, data } = useQuery<IHistorical[]>(
     ["ohlcv", "price", coinId],
     () => {
@@ -54,7 +55,8 @@ function Price({ coinId, isDark }: IPriceProps) {
                 },
               },
             },
-            theme: { mode: isDark ? "dark" : "light" },
+            // theme: { mode: isDark ? "dark" : "light" },
+            theme: { mode: "dark" },
             yaxis: {
               show: false,
             },

@@ -131,11 +131,12 @@ interface RouteState {
   name: string;
 }
 
-interface ICoinProps {
-  isDark: boolean;
-}
+// interface ICoinProps {
+//   isDark: boolean;
+// }
 
-function Coin({ isDark }: ICoinProps) {
+// function Coin({ isDark }: ICoinProps) {
+function Coin() {
   // react-router-dom v6가 되면서 사용법이 바뀌었다...
   // useParams : 파라미터의 정보를 가져온다.
   const { coinId } = useParams() as unknown as Params;
@@ -309,11 +310,13 @@ function Coin({ isDark }: ICoinProps) {
       <Routes>
         <Route
           path="chart"
-          element={<Chart isDark={isDark} coinId={coinId as string} />}
+          // element={<Chart isDark={isDark} coinId={coinId as string} />}
+          element={<Chart coinId={coinId as string} />}
         />
         <Route
           path="price"
-          element={<Price isDark={isDark} coinId={coinId as string} />}
+          // element={<Price isDark={isDark} coinId={coinId as string} />}
+          element={<Price coinId={coinId as string} />}
         />
       </Routes>
     </Container>

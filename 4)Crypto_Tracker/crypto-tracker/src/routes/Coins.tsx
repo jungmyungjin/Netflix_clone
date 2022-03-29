@@ -63,11 +63,11 @@ interface Icoin {
   type: string;
 }
 
-interface ICoinsProps {
-  toggleDark: () => void;
-}
+// interface ICoinsProps {
+//   toggleDark: () => void;
+// }
 
-function Coins({ toggleDark }: ICoinsProps) {
+function Coins() {
   /* React Query를 사용한 [api.tsx] 파일로 분리
   const [coins, setCoins] = useState<CoinInterface[]>([]);
   const [loading, setLoading] = useState(true);
@@ -94,7 +94,8 @@ function Coins({ toggleDark }: ICoinsProps) {
       </Helmet>
       <Header>
         <Title>Coins</Title>
-        <button onClick={toggleDark}>Toggle Mode</button>
+        {/*<button onClick={toggleDark}>Toggle Mode</button>*/}
+        <button>Toggle Mode</button>
       </Header>
       {isLoading ? (
         <Loading>Loading....</Loading>

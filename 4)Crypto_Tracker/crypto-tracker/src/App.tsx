@@ -72,15 +72,19 @@ a{
 `;
 
 function App() {
-  const [isDark, setIsDark] = useState(false);
-  const toggleDark = () => setIsDark((current) => !current); // toggle function
+  // const [isDark, setIsDark] = useState(false);
+  // const toggleDark = () => setIsDark((current) => !current); // toggle function
   return (
     // Fragment: 유령컴포넌트로 감싼다
     <>
       {/*state를 사용하기 위해 ThemeProvider를 'index.tsx' -> 'App.tsx' 로 변경하였다.*/}
-      <ThemeProvider theme={isDark ? darkTheme : lightTheme}>
+      {/*  <ThemeProvider theme={isDark ? darkTheme : lightTheme}>*/}
+      <ThemeProvider theme={darkTheme}>
         <GlobalStyled />
-        <Router isDark={isDark} toggleDark={toggleDark} />
+        {/*<Router isDark={isDark} toggleDark={toggleDark} />*/}
+        {/*<Router toggleDark={toggleDark} />*/}
+        <Router />
+
         <ReactQueryDevtools initialIsOpen={true}></ReactQueryDevtools>
       </ThemeProvider>
     </>
