@@ -2,6 +2,8 @@ import { useParams } from "react-router";
 import { useQuery } from "react-query";
 import { fetchCoinHistory } from "./api";
 import ApexChart from "react-apexcharts";
+import { useRecoilValue } from "recoil";
+import { isDarkAtom } from "../atoms";
 
 interface IChartProps {
   coinId: string;
@@ -30,6 +32,7 @@ function Chart({ coinId }: IChartProps) {
     },
     { refetchInterval: 10000 }
   );
+  const isDark = useRecoilValue(isDarkAtom); // 필요한 위치에 바로 사용한다 (테마 적용부분)
   return (
     <div>
       {isLoading ? (
@@ -54,8 +57,7 @@ function Chart({ coinId }: IChartProps) {
               toolbar: { show: false },
               background: "transparent",
             },
-            // theme: { mode: isDark ? "dark" : "light" },
-            theme: { mode: "dark" },
+            theme: { mode: isDark ? "dark" : "light" },
             yaxis: {
               show: false,
             },

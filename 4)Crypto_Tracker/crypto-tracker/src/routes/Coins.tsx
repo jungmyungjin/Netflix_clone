@@ -4,6 +4,8 @@ import React, { useState, useEffect } from "react";
 import { useQuery } from "react-query";
 import { fetchCoins } from "./api";
 import { Helmet } from "react-helmet";
+import { useSetRecoilState } from "recoil";
+import { isDarkAtom } from "../atoms";
 
 const Title = styled.h1`
   color: ${(props) => props.theme.accentColor};
@@ -87,6 +89,12 @@ function Coins() {
   // isLoading{boolean} : fetch 함수가 로딩중인지 알려주는 변수
   // data : fetch 함수가 리턴하는 값을 담은 변수
   const { isLoading, data } = useQuery<Icoin[]>("allCoins", fetchCoins);
+
+  // useSetRecoilState : Recoil value를 수정할 수 있는 함수.
+  // setterFn 는 setState와 같은 방식으로 동작한다
+  const setDarkAtom = useSetRecoilState(isDarkAtom);
+  const toggleDarkAtom = () => setDarkAtom((prev) => !prev);
+
   return (
     <Container>
       <Helmet>
@@ -95,7 +103,7 @@ function Coins() {
       <Header>
         <Title>Coins</Title>
         {/*<button onClick={toggleDark}>Toggle Mode</button>*/}
-        <button>Toggle Mode</button>
+        <button onClick={toggleDarkAtom}>Toggle Mode</button>
       </Header>
       {isLoading ? (
         <Loading>Loading....</Loading>

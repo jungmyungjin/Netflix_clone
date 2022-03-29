@@ -36,6 +36,7 @@ const Header = styled.header`
     transition: color 0.1s ease-in-out;
   }
   a {
+    color: ${(props) => props.theme.subAccentColor};
     font-size: 25px;
   }
 `;
@@ -97,6 +98,7 @@ const Description = styled.div`
     font-size: 20px;
     font-family: "Chakra Petch", sans-serif;
     line-height: 25px;
+    color: ${(props) => props.theme.subAccentColor};
   }
 `;
 
