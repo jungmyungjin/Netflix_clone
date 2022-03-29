@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useQuery } from "react-query";
 import { fetchCoins } from "./api";
 import { Helmet } from "react-helmet";
@@ -23,7 +23,7 @@ const Header = styled.header`
 const CoinList = styled.ul``;
 const Coin = styled.li`
   background-color: white;
-  color: ${(props) => props.theme.bgColor};
+  color: ${(props) => props.theme.textColor};
   border-radius: 15px;
   margin-bottom: 10px;
   a {
@@ -63,7 +63,11 @@ interface Icoin {
   type: string;
 }
 
-function Coins() {
+interface ICoinsProps {
+  toggleDark: () => void;
+}
+
+function Coins({ toggleDark }: ICoinsProps) {
   /* React Query를 사용한 [api.tsx] 파일로 분리
   const [coins, setCoins] = useState<CoinInterface[]>([]);
   const [loading, setLoading] = useState(true);
@@ -90,6 +94,7 @@ function Coins() {
       </Helmet>
       <Header>
         <Title>Coins</Title>
+        <button onClick={toggleDark}>Toggle Mode</button>
       </Header>
       {isLoading ? (
         <Loading>Loading....</Loading>

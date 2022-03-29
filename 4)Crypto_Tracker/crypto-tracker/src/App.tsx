@@ -3,6 +3,8 @@ import { useState } from "react";
 import { createGlobalStyle } from "styled-components";
 import Router from "./routes/Router";
 import { ReactQueryDevtools } from "react-query/devtools";
+import { ThemeProvider } from "styled-components";
+import { darkTheme, lightTheme } from "./theme";
 
 // 글로벌 스타일 적용 : 전역 스코프에 스타일을 올려준다
 // styled-reset 수동으로 적용
@@ -70,12 +72,17 @@ a{
 `;
 
 function App() {
+  const [isDark, setIsDark] = useState(false);
+  const toggleDark = () => setIsDark((current) => !current); // toggle function
   return (
     // Fragment: 유령컴포넌트로 감싼다
     <>
-      <GlobalStyled />
-      <Router />
-      <ReactQueryDevtools initialIsOpen={true}></ReactQueryDevtools>
+      {/*state를 사용하기 위해 ThemeProvider를 'index.tsx' -> 'App.tsx' 로 변경하였다.*/}
+      <ThemeProvider theme={isDark ? darkTheme : lightTheme}>
+        <GlobalStyled />
+        <Router isDark={isDark} toggleDark={toggleDark} />
+        <ReactQueryDevtools initialIsOpen={true}></ReactQueryDevtools>
+      </ThemeProvider>
     </>
   );
 }

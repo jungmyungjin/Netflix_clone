@@ -5,6 +5,7 @@ import ApexChart from "react-apexcharts";
 
 interface IChartProps {
   coinId: string;
+  isDark: boolean;
 }
 interface IHistorical {
   time_open: string;
@@ -17,7 +18,7 @@ interface IHistorical {
   market_cap: number;
 }
 // coinID 가져오기 방법 2 : coin 페이지에서 props로 받아오기 (현재 코드)
-function Chart({ coinId }: IChartProps) {
+function Chart({ coinId, isDark }: IChartProps) {
   // coinID 가져오기 방법 1 : 파라미터 값을 가져오기
   // const params = useParams();
   // console.log(params);
@@ -52,7 +53,7 @@ function Chart({ coinId }: IChartProps) {
               toolbar: { show: false },
               background: "transparent",
             },
-            theme: { mode: "dark" },
+            theme: { mode: isDark ? "dark" : "light" },
             yaxis: {
               show: false,
             },
