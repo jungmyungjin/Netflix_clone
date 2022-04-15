@@ -1,43 +1,65 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import styled from "styled-components";
+import { atom, useRecoilState } from "recoil";
 
 // React hook form 사용전 코드
-/*
+
+interface IForm {
+  toDo: string;
+}
+
+interface IToDo {
+  text: string;
+  id: number;
+  category: "TO_DO" | "DOING" | "DONE";
+}
+
+const toDoState = atom<IToDo[]>({
+  key: "toDo",
+  default: [],
+});
+
 function ToDoList() {
-  const [toDo, setToDo] = useState("");
-  const [toDoError, setToDoError] = useState("");
-  const onChange = (event: React.FormEvent<HTMLInputElement>) => {
-    const {
-      currentTarget: { value },
-    } = event;
-    setToDoError("");
-    setToDo(value);
-  };
-  const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    if (toDo.length < 10) {
-      return setToDoError("To do should be longer.");
-    }
-    console.log("submit ");
+  const [toDos, setToDos] = useRecoilState(toDoState); // value값을 쓰거나 변경할일이 있을때 한번에 사용
+  // const value = useRecoilValue(toDoState); // value 만 쓰려고 할때
+  // const modFn = useSetRecoilState(toDoState); // value 값을 변경하려고 할때
+  const { register, handleSubmit, setValue } = useForm<IForm>();
+  const onSubmit = ({ toDo }: IForm) => {
+    // toDos.push()  // 이렇게 하면 안된다. 렌더링이 다시 발생하지 않는다.
+    // [Tip] setToDos(value) 의 value 값을 함수로 준다면, return 되는 값으로 바뀌게 된다.
+    setToDos((oldToDos) => [
+      { text: toDo, id: Date.now(), category: "TO_DO" },
+      ...oldToDos,
+    ]); //
+    // setToDos((oldToDos) => [oldToDos]); // Bad Case : oldToDos가 배열 인데, []로 감싸면 배열 안에 배열을 넣은 꼴이 되기 때문이다.
+    setValue("toDo", ""); // submit 후 입력 창 에 남아았는 문자열들을 비워준다.
   };
   return (
     <div>
-      <form onSubmit={onSubmit}>
+      <h1>To Dos</h1>
+      <hr />
+      <form onSubmit={handleSubmit(onSubmit)}>
         <input
-          onChange={onChange}
-          value={toDo}
+          {...register("toDo", {
+            required: "Please write a To Do",
+          })}
           type="text"
           placeholder="Write a to do"
         />
         <button>Add</button>
-        {toDoError === "" ? null : toDoError}
       </form>
+      <ul>
+        {toDos.map((toDo) => (
+          <li key={toDo.id}>{toDo.text}</li>
+        ))}
+      </ul>
     </div>
   );
 }
-*/
 
+/*
+// react-hook-form 사용 예제 코드
 interface IForm {
   email: string;
   firstName: string;
@@ -47,7 +69,6 @@ interface IForm {
   password1: string;
   extraError?: string;
 }
-
 function ToDoList() {
   const {
     register,
@@ -87,8 +108,8 @@ function ToDoList() {
         onSubmit={handleSubmit(onVaild)}
         style={{ display: "flex", flexDirection: "column" }}
       >
-        {/* register 함수가 반환하는 객체를 props로 준다
-			useForm의 register의 사용으로 value, onChange, useState를 대체해준다 */}
+        {//register 함수가 반환하는 객체를 props로 준다
+			//useForm의 register의 사용으로 value, onChange, useState를 대체해준다}
         <input
           {...register("email", {
             required: "Email is required!",
@@ -161,5 +182,6 @@ function ToDoList() {
     </div>
   );
 }
+*/
 
 export default ToDoList;
