@@ -1,28 +1,44 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import styled from "styled-components";
-import { useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import CreateToDo from "./CreateToDo";
-import { toDoState } from "../atomState";
+import {
+  categories,
+  categoryState,
+  toDoSelector,
+  toDoState,
+} from "../atomState";
 import ToDo from "./ToDo";
 
 // React hook form 사용전 코드
 
 function ToDoList() {
   // const [toDos] = useRecoilState(toDoState); // value값을 쓰거나 변경할일이 있을때 한번에 사용
-  const toDos = useRecoilValue(toDoState); // value 만 쓰려고 할때
+  // const toDos = useRecoilValue(toDoState); // value 만 쓰려고 할때
   // const modFn = useSetRecoilState(toDoState); // value 값을 변경하려고 할때
 
+  const toDos = useRecoilValue(toDoSelector);
+  const [category, setCategory] = useRecoilState(categoryState);
+  const onInput = (event: React.FormEvent<HTMLSelectElement>) => {
+    setCategory(event.currentTarget.value as any); // as any : type 체크할 필요 없다고 설정
+  };
+  console.log(category);
   return (
     <div>
       <h1>To Dos</h1>
       <hr />
+      <form action="">
+        <select value={category} onInput={onInput}>
+          <option value={categories.TO_DO}>To do</option>
+          <option value={categories.DOING}>Doing</option>
+          <option value={categories.DONE}>Done</option>
+        </select>
+      </form>
       <CreateToDo />
-      <ul>
-        {toDos.map((toDo) => (
-          <ToDo key={toDo.id} {...toDo} />
-        ))}
-      </ul>
+      {toDos?.map((toDo) => (
+        <ToDo key={toDo.id} {...toDo} />
+      ))}
     </div>
   );
 }
